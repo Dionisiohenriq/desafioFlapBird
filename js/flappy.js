@@ -148,13 +148,12 @@ function FlappyBird() {
 
 	// animation, start, pause, restart
 
-	let startTime, pauseTime, temporizer, isRunning;
+	let startTime, pauseTime, temporizer, isRunning, resetTime;
 
 	this.start = () => {
 		if (!isRunning) {
 			temporizer = setInterval(() => {
 				isRunning = true;
-
 				startTime = new Date();
 
 				barriers.animate();
@@ -169,10 +168,9 @@ function FlappyBird() {
 	};
 
 	this.pauseInterval = () => {
-		console.log(temporizer);
-
 		if (temporizer != undefined) {
 			clearInterval(temporizer);
+
 			pauseTime = new Date();
 			isRunning = false;
 		}
@@ -188,21 +186,29 @@ function FlappyBird() {
 			}, elapsedTime);
 		}
 	};
+
+	this.restartGame = (resetTime) => {
+		setTimeout(() => {
+			isRunning = true;
+			clearInterval(temporizer);
+		}, this.startTime);
+	};
 }
 
 let flappyBird = new FlappyBird();
 
 this.onKeyDown = (e) => {
 	console.log(e);
-	if (e.key == "space") {
+	if (e.key == "s") {
 		flappyBird.start();
 	} else if (e.key == "p") {
 		flappyBird.pauseInterval();
 	} else if (e.key == "r") {
 		flappyBird.resumeInterval();
+	} else if (e.key == "b") {
+		this.resetTime = new Date();
+		flappyBird.restartGame(resetTime);
 	}
 };
-
-this.resetGame = () => {};
 
 window.addEventListener("keydown", onKeyDown);
